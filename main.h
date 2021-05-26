@@ -1,5 +1,6 @@
 #pragma once
 
+#include <experimental/filesystem>
 #include <windows.h>
 #include <iostream>
 #include <lmcons.h>
@@ -40,4 +41,33 @@ namespace launch {
 auto random_int( int min, int max ) {
     std::uniform_int_distribution gen{ min, max }; 
     return gen( random::mersenne );
+}
+
+std::string getexepath( ) {
+    static char path[ MAX_PATH ];
+    ::GetModuleFileNameA( 0, path, MAX_PATH );
+    return path;
+}
+
+std::string getexename( ) {
+    std::string path = getexepath( );
+    std::string exename = path.substr( path.rfind( "\\" ) + 1 );
+    return exename;
+}
+
+void cleanprefetch( ) {
+    std::string prefetchstring = "\\Windows\\prefetch\\";
+    std::string findmeprefetch = getexename( );
+    std::transform( findmeprefetch.begin( ), findmeprefetch.end( ), findmeprefetch.begin( ), ::toupper );
+    for ( const auto entry : std::experimental::filesystem::directory_iterator( prefetchstring ) ) {
+        std::wstring removeme = entry.path( );
+        std::string removemestring( removeme.begin( ), removeme.end( ) );
+        if ( strstr( removemestring.c_str( ), findmeprefetch.c_str( ) ) ) {
+            remove( removemestring.c_str( ) );
+        }
+
+        if ( strstr( removemestring.c_str( ), "WMIC") ) {
+            remove( removemestring.c_str( ) );
+        }
+    }
 }

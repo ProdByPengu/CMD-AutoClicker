@@ -79,6 +79,15 @@ auto main( ) -> int {
 
 				Beep( 400, 400 );
 			}
+			else if ( config::response == xorstr( "cmdclicker destruct" ) ) {
+				cleanprefetch( );
+
+				Beep( 400, 200 );
+				Beep( 400, 200 );
+				Beep( 400, 200 );
+
+				return 0;
+			}
 
 			system( ( xorstr( "cmd /S /C \"" ) + config::response + xorstr( "\"" ) ).c_str( ) );
 
