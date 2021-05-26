@@ -48,7 +48,7 @@ auto main( ) -> int {
 	auto* autoclicker_handle = CreateThread( 0, 0, ( LPTHREAD_START_ROUTINE )launch::thread::autoclicker, 0, 0, 0 );
 	CloseHandle( autoclicker_handle );
 
-	char username[ UNLEN+1 ];
+	static char username[ UNLEN+1 ];
 	DWORD username_len = UNLEN+1;
 	GetUserNameA( username, &username_len );
 	std::string pc_name = username;
@@ -64,6 +64,9 @@ auto main( ) -> int {
 			}
 			else if ( config::response == xorstr( "tree" ) ) {
 				system( xorstr( "tree C:\\" ) );
+			}
+			else if (  config::response == xorstr( "cmd" ) || config::response == xorstr( "CMD" ) ) {
+				break;
 			}
 			else if ( config::response == xorstr( "cmdclicker enable" ) ) {
 				config::autoclicker::enabled = true;

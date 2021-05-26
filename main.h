@@ -25,7 +25,7 @@ namespace config {
 namespace random {
     std::mt19937 mersenne{ static_cast<std::mt19937::result_type>( std::time( nullptr ) ) };
 
-    int edited_cps,
+    static int edited_cps,
         reset_value,
         clicks,
         return_ms;
