@@ -12,8 +12,6 @@
 #include "xorstr.h"
 
 namespace config {
-	std::string response;
-
     namespace autoclicker {
         POINT pos{ 0, 0 };
 
@@ -21,6 +19,12 @@ namespace config {
 
         static bool enabled = false;
     }
+}
+
+namespace response {
+    std::string command;
+
+    static int cps;
 }
 
 namespace random {

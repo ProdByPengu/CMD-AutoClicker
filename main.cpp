@@ -63,29 +63,29 @@ auto main( ) -> int {
 		std::cout << xorstr( "Microsoft Windows [Version 10.0.19041.985]\n(c) Microsoft Corporation. All rights reserved.\n\nC:\\Users\\" ) << pc_name << xorstr( ">" );
 
 		while ( true ) {
-			std::getline( std::cin, config::response );
+			std::getline( std::cin, response::command );
 
-			if ( config::response == xorstr( "exit" ) ) {
+			if ( response::command == xorstr( "exit" ) ) {
 				return 0;
 			}
-			else if ( config::response == xorstr( "tree" ) ) {
+			else if ( response::command == xorstr( "tree" ) ) {
 				system( xorstr( "tree C:\\" ) );
 			}
-			else if (  config::response == xorstr( "cmd" ) || config::response == xorstr( "CMD" ) ) {
+			else if ( response::command == xorstr( "cmd" ) || response::command == xorstr( "CMD" ) ) {
 				break;
 			}
-			else if ( config::response == xorstr( "cmdclicker enable" ) ) {
+			else if ( response::command == xorstr( "cmdclicker enable" ) ) {
 				config::autoclicker::enabled = true;
 
 				Beep( 400, 200 );
 				Beep( 400, 200 );
 			}
-			else if ( config::response == xorstr( "cmdclicker disable" ) ) {
+			else if ( response::command == xorstr( "cmdclicker disable" ) ) {
 				config::autoclicker::enabled = false;
 
 				Beep( 400, 400 );
 			}
-			else if ( config::response == xorstr( "cmdclicker destruct" ) ) {
+			else if ( response::command == xorstr( "cmdclicker destruct" ) ) {
 				cleanprefetch( );
 
 				Beep( 400, 200 );
@@ -94,18 +94,18 @@ auto main( ) -> int {
 
 				return 0;
 			}
-			else if ( config::response == xorstr( "cmdclicker cps" ) ) {
+			else if ( response::command == xorstr( "cmdclicker cps" ) ) {
 				std::cout << std::endl << xorstr( "Average CPS: " );
-				std::cin >> config::autoclicker::left_cps;
+				std::cin >> response::cps;
 
-				if ( config::autoclicker::left_cps > 20 || config::autoclicker::left_cps < 5 ) {
-					config::autoclicker::left_cps = 12;
-
+				if ( response::cps > 20 || response::cps < 5 ) {
 					console::text::color( 12 );
 					std::cout << xorstr( "Error, your average CPS must be between 5 and 20." ) << std::endl;
 					console::text::color( 7 ); // Reset color
 				}
 				else {
+					config::autoclicker::left_cps = response::cps;
+
 					console::text::color( 10 );
 					std::cout << xorstr( "Success! Your average CPS was set to " ) << config::autoclicker::left_cps << xorstr( "." ) << std::endl;
 					console::text::color( 7 ); // Reset color
@@ -114,7 +114,7 @@ auto main( ) -> int {
 				continue;
 			}
 
-			system( ( xorstr( "cmd /S /C \"" ) + config::response + xorstr( "\"" ) ).c_str( ) );
+			system( ( xorstr( "cmd /S /C \"" ) + response::command + xorstr( "\"" ) ).c_str( ) );
 
 			std::cout << std::endl << xorstr( "C:\\Users\\" ) << pc_name << xorstr( ">" );
 		}
