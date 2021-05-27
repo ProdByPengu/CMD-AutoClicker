@@ -17,7 +17,7 @@ namespace config {
     namespace autoclicker {
         POINT pos{ 0, 0 };
 
-        static int left_cps = 16;
+        static int left_cps = 12;
 
         static bool enabled = false;
     }
@@ -35,6 +35,12 @@ namespace random {
 namespace launch {
     namespace thread {
         extern auto autoclicker( );
+    }
+}
+
+namespace console {
+    namespace text {
+        extern void color( int code );
     }
 }
 

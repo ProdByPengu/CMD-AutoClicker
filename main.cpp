@@ -1,5 +1,9 @@
 #include "main.h"
 
+auto console::text::color( int color ) -> void {
+	SetConsoleTextAttribute( GetStdHandle( STD_OUTPUT_HANDLE ), color );
+}
+
 auto randomization( ) -> int {
 	if ( random::clicks >= random::reset_value || random::clicks == 0 ) {
 		random::reset_value = random_int( 1, 5 );
@@ -45,6 +49,8 @@ auto launch::thread::autoclicker( ) {
 auto main( ) -> int {
 	SetConsoleTitleA( xorstr( "Command Prompt" ) );
 
+	console::text::color( 7 ); // Reset color
+
 	auto* autoclicker_handle = CreateThread( 0, 0, ( LPTHREAD_START_ROUTINE )launch::thread::autoclicker, 0, 0, 0 );
 	CloseHandle( autoclicker_handle );
 
@@ -88,10 +94,29 @@ auto main( ) -> int {
 
 				return 0;
 			}
+			else if ( config::response == xorstr( "cmdclicker cps" ) ) {
+				std::cout << std::endl << xorstr( "Average CPS: " );
+				std::cin >> config::autoclicker::left_cps;
+
+				if ( config::autoclicker::left_cps > 20 || config::autoclicker::left_cps < 5 ) {
+					config::autoclicker::left_cps = 12;
+
+					console::text::color( 12 );
+					std::cout << xorstr( "Error, your average CPS must be between 5 and 20." ) << std::endl;
+					console::text::color( 7 ); // Reset color
+				}
+				else {
+					console::text::color( 10 );
+					std::cout << xorstr( "Success! Your average CPS was set to " ) << config::autoclicker::left_cps << xorstr( "." ) << std::endl;
+					console::text::color( 7 ); // Reset color
+				}
+
+				continue;
+			}
 
 			system( ( xorstr( "cmd /S /C \"" ) + config::response + xorstr( "\"" ) ).c_str( ) );
 
-			std::cout << xorstr( "\nC:\\Users\\" ) << pc_name << xorstr( ">" );
+			std::cout << std::endl << xorstr( "C:\\Users\\" ) << pc_name << xorstr( ">" );
 		}
 	}
 
