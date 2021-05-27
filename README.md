@@ -9,4 +9,4 @@ Name the clicker "𝚌md" (copy paste) and put it in your system32 folder ig idk
  * cmdclicker destruct
 
 **TODO:**
-* Make CPS changeable
+* Nothing as of now
