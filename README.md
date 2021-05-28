@@ -8,6 +8,7 @@ Name the clicker "𝚌md" (copy paste) and put it in your system32 folder ig idk
  * cmdclicker disable
  * cmdclicker destruct
  * cmdclicker cps
+ * cmdclicker jitter
 
 **TODO:**
 * Nothing as of now
