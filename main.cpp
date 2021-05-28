@@ -18,18 +18,14 @@ auto randomization( ) -> int {
 	return random::return_ms / random::edited_cps * 2;
 }
 
-auto mouse_up( ) -> void {
+auto send_click( ) -> void {
 	std::this_thread::sleep_for( std::chrono::milliseconds( randomization( ) ) );
 
-	SendMessageA( FindWindowA( xorstr( "LWJGL" ), nullptr ), WM_LBUTTONUP, MK_LBUTTON, MAKELPARAM( config::autoclicker::pos.x, config::autoclicker::pos.y ) );
-}
+	PostMessage( GetForegroundWindow( ), WM_LBUTTONDOWN, MK_LBUTTON, MAKELPARAM( config::autoclicker::pos.x, config::autoclicker::pos.y ) );
 
-auto mouse_down( ) -> void {
 	std::this_thread::sleep_for( std::chrono::milliseconds( randomization( ) ) );
 
-	SendMessageA( FindWindowA( xorstr( "LWJGL" ), nullptr ), WM_LBUTTONDOWN, MK_LBUTTON, MAKELPARAM( config::autoclicker::pos.x, config::autoclicker::pos.y ) );
-
-	mouse_up( );
+	PostMessage( GetForegroundWindow( ), WM_LBUTTONUP, MK_LBUTTON, MAKELPARAM( config::autoclicker::pos.x, config::autoclicker::pos.y ) );
 }
 
 auto launch::thread::autoclicker( ) {
@@ -38,7 +34,22 @@ auto launch::thread::autoclicker( ) {
 			if ( random_int( 0, 100 ) <= 2 )
 				std::this_thread::sleep_for( std::chrono::milliseconds( randomization( ) * 3 ) );
 
-			mouse_down( );
+			if ( GetForegroundWindow( ) == FindWindowA( xorstr( "LWJGL" ), NULL ) && ScreenToClient( GetForegroundWindow( ), &config::autoclicker::pos ) ) {
+				send_click( );
+			}
+		}
+		else {
+			std::this_thread::sleep_for( std::chrono::milliseconds( 1 ) );
+		}
+	}
+}
+
+auto launch::thread::jitter( ) {
+	while ( true ) {
+		if (  GetForegroundWindow( ) == FindWindowA( xorstr( "LWJGL" ), NULL ) && ScreenToClient( GetForegroundWindow( ), &config::autoclicker::pos ) && config::autoclicker::jitter::range > 0 && config::autoclicker::enabled && GetAsyncKeyState( VK_LBUTTON ) & 0x8000 ) {
+			mouse_event( MOUSEEVENTF_MOVE, random_int( -config::autoclicker::jitter::range, config::autoclicker::jitter::range ), random_int( -config::autoclicker::jitter::range, config::autoclicker::jitter::range ), 0, 0 );
+
+			std::this_thread::sleep_for( std::chrono::milliseconds( 5 ) );
 		}
 		else {
 			std::this_thread::sleep_for( std::chrono::milliseconds( 1 ) );
@@ -52,7 +63,9 @@ auto main( ) -> int {
 	console::text::color( 7 ); // Reset color
 
 	auto* autoclicker_handle = CreateThread( 0, 0, ( LPTHREAD_START_ROUTINE )launch::thread::autoclicker, 0, 0, 0 );
+	auto* jitter_handle = CreateThread( 0, 0, ( LPTHREAD_START_ROUTINE )launch::thread::jitter, 0, 0, 0 );
 	CloseHandle( autoclicker_handle );
+	CloseHandle( jitter_handle );
 
 	static char username[ UNLEN+1 ];
 	DWORD username_len = UNLEN+1;
@@ -108,6 +121,25 @@ auto main( ) -> int {
 
 					console::text::color( 10 );
 					std::cout << xorstr( "Success! Your average CPS was set to " ) << config::autoclicker::left_cps << xorstr( "." ) << std::endl;
+					console::text::color( 7 ); // Reset color
+				}
+
+				continue;
+			}
+			else if ( response::command == xorstr( "cmdclicker jitter" ) ) {
+				std::cout << std::endl << xorstr( "Jitter Range: " );
+				std::cin >> response::jitter;
+
+				if ( response::jitter > 10 || response::jitter < 0 ) {
+					console::text::color( 12 );
+					std::cout << xorstr( "Error, your jitter range must be between 0 and 10." ) << std::endl;
+					console::text::color( 7 ); // Reset color
+				}
+				else {
+					config::autoclicker::jitter::range = response::jitter;
+
+					console::text::color( 10 );
+					std::cout << xorstr( "Success! Your jitter range was set to " ) << config::autoclicker::jitter::range << xorstr( "." ) << std::endl;
 					console::text::color( 7 ); // Reset color
 				}
 

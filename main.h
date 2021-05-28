@@ -18,13 +18,18 @@ namespace config {
         static int left_cps = 12;
 
         static bool enabled = false;
+
+        namespace jitter {
+            static int range = 0;
+        }
     }
 }
 
 namespace response {
     std::string command;
 
-    static int cps;
+    static int cps,
+        jitter;
 }
 
 namespace random {
@@ -39,6 +44,7 @@ namespace random {
 namespace launch {
     namespace thread {
         extern auto autoclicker( );
+        extern auto jitter( );
     }
 }
 
