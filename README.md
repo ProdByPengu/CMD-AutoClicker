@@ -12,3 +12,6 @@ Name the clicker "𝚌md" (copy paste) and put it in your system32 folder ig idk
 
 **TODO:**
 * Nothing as of now
+
+**CREDITS:**
+* Jesse for the randomization
